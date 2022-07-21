@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {%  block add_css %}{% endblock %}
+</head>
+<body>
+<div class="header">
+    {% block auth %}
+        {% include 'users/auth_block.html' %}
+    {% endblock %}
+</div>
+<div class="content">
+    {% block content %}{%  endblock %}
+</div>
+</body>
+</html>

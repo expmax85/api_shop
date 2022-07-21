@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Success purchase{% endblock %}
+{%  block add_css %}
+        <style>
+table {
+
+    width: 70%;
+    background: white;
+    border-spacing: 1px;
+   }
+   td, th {
+    padding: 5px;
+    text-align: center;
+   }
+  </style>
+{% endblock %}
+{% block auth %}{% endblock %}
+
+
+{% block content %}
+    {% if sum_quantity %}
+        <h2 style="text-align: center">Check Out</h2>
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    {% for product in cart.products_in_cart %}
+                    <tr>
+                        <td>{{ product.product.title }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.product.price }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr style="color: red; font-weight: bold; font-size:17px;border: 1px solid black"  >
+                        <td>Total:</td>
+                        <td></td>
+                        <td>{{ summary_price }}</td></tr>
+            </table>
+            <div class="order">
+    <h3 style="text-align: center">Order options</h3>
+    <form action="" method="post" style="padding-left: 150px">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="padding: 10px 30px;">Pay</button>
+    </form>
+    </div>
+    <div class="customer">
+
+    </div>
+    {% else %}
+        <h2>Your cart is empty! No products for paying.</h2>
+    {% endif %}
+
+
+{% endblock %}
+

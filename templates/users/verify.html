@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Verification{% endblock %}
+
+{% block content %}
+
+  <h2>Verification</h2>
+
+  {% if form.errors %}
+    <p class="error">Sorry, that's not a valid token</p>
+  {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == VERIFY_TEST_MESSAGE %}
+            <div style="color: red">You see that, because its a test project. Token: {{message}}</div>
+            {% endif %}
+        {%endfor %}
+    {% endif %}
+  <form action="{% url 'users-polls:verify' %}" method="post">
+  	{% csrf_token %}
+  	{{form.as_p}}
+
+    <input type="submit" value="verify" />
+    
+  </form>
+
+{% endblock %}

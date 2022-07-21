@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {%endblock%}
+
+{% block auth %}{%endblock%}
+
+{% block content%}
+<form action="{% url 'users-polls:login' %}" method="post">
+        {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>
+    <button><a href="{% url 'users-polls:register' %}" class="btn btn_success">Register</a></button>
+    <a href="{% url 'users-polls:restore-password' %}">Forgot the password?</a>
+{% endblock %}

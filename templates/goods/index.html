@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Main Page{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == ERROR_QUANTITY %}
+            <div style="color: red">{{message}}</div>
+            {% elif message.level == SUCCESS_VERIFY %}
+            <div style="color: cornflowerblue">{{message}}</div>
+            {% endif %}
+        {%endfor %}
+    {% endif %}
+    <div class="product_list" style="display:flex; flex-wrap: wrap">
+    {% for product in products %}
+        <div class="product" style="border: 1px solid black; width: 200px">
+            <div class="info" style="text-align: center">
+                <ul style="list-style-type: none; padding: 0">
+                    <li style="margin-bottom: 10px">
+                        <strong class="Card-title">{{ product.title }}</strong>
+                    </li>
+                    <li>
+                        <span>Article: </span>{{ product.article }}
+                    </li>
+                    <li>
+                        <span>Price: </span>{{ product.price }}
+                    </li>
+                    <li>
+                        <span>Quantity: </span>{{ product.quantity }}
+                    </li>
+                    <li>
+                        {{ product.category }}
+                    </li>
+                    {% if perms.shop.add_cart %}
+                    <li>
+                        <a href="{% url 'shop-polls:add_to_cart' product.id%}">Add to cart</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

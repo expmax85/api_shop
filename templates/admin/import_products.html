@@ -1,0 +1,52 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n static %}
+
+{% block title %}Import products{% endblock %}
+
+{% block usertools %}
+        {% if request.user.is_superuser %}
+        <div id="user-tools">
+            {% block welcome-msg %}
+                {% translate 'Welcome,' %}
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+            {% endblock %}
+            {% block userlinks %}
+                {% if site_url %}
+                    <a href="{{ site_url }}">{% translate 'View site' %}</a> /
+                {% endif %}
+                {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <a href="{{ docsroot }}">{% translate 'Documentation' %}</a> /
+                    {% endif %}
+                {% endif %}
+                {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a> /
+                {% endif %}
+                <a href="{% url 'admin:logout' %}">{% translate 'Log out' %}</a>
+            {% endblock %}
+        </div>
+        {% endif %}
+{%  endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">Home</a> &rsaquo; Import
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h1>Import products</h1>
+<form method="post" enctype="multipart/form-data">
+    <div class="module" style="padding-left: 200px">
+        {% csrf_token %}
+        <div class="form-row">
+            {{ form.as_p }}
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="import" class="default" name="_save">
+        </div>
+    </div>
+</form>
+
+{% endblock %}

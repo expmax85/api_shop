@@ -1,0 +1,62 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n static %}
+
+{% block title %}Import products{% endblock %}
+
+{% block usertools %}
+        {% if request.user.is_superuser %}
+        <div id="user-tools">
+            {% block welcome-msg %}
+                {% translate 'Welcome,' %}
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+            {% endblock %}
+            {% block userlinks %}
+                {% if site_url %}
+                    <a href="{{ site_url }}">{% translate 'View site' %}</a> /
+                {% endif %}
+                {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <a href="{{ docsroot }}">{% translate 'Documentation' %}</a> /
+                    {% endif %}
+                {% endif %}
+                {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a> /
+                {% endif %}
+                <a href="{% url 'admin:logout' %}">{% translate 'Log out' %}</a>
+            {% endblock %}
+        </div>
+        {% endif %}
+{%  endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">Home</a> &rsaquo; Reports
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h1>Report purchases by all time</h1>
+    <ul >
+    {% for date, purshases in result.items %}
+        <li>Purchases for {{ date }}:</li>
+        <ul>
+        {% for key, value in purshases.items %}
+            <li>
+            {% if value.items %}
+                Product: {{ key }}
+                <ul>
+                {% for attr, attr_val in value.items %}
+                    <li>{{ attr }}: {{ attr_val }}</li>
+                {%  endfor %}
+                </ul>
+            {% else %}
+                {{ key }}: {{ value }}
+            {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+    </ul>
+    Total profit: {{ total }}
+{% endblock %}
