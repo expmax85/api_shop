@@ -44,7 +44,8 @@ class ImportView(SuperUserRequiredMixin, View):
             file = form.save()
             imp = Import(file)
             imp.import_data()
-            messages.add_message(request, messages.SUCCESS, 'The products was successfully added. Se the import_log for details import.')
+            messages.add_message(request, messages.SUCCESS, 'The products was successfully added.'
+                                                            ' See the import_log file for import details.')
             return redirect('admin:index')
         return redirect(request.META.get('HTTP_REFERER'))
 

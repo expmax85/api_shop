@@ -36,6 +36,7 @@ class CheckoutView(PermMixin, View):
     """
     Get checkout and make purchase. Only for verified users.
     """
+    template_name = 'shop/checkout.html'
     form_class = OrderForm
     login_url = '/users/login/'
 
@@ -48,7 +49,7 @@ class CheckoutView(PermMixin, View):
                    'address': user.address,
                    }
         form = self.form_class(initial=initial)
-        return render(request, 'shop/checkout.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request: HttpRequest) -> Callable:
         form = self.form_class(request.POST)
@@ -61,4 +62,4 @@ class CheckoutView(PermMixin, View):
                 user_cart.write_off_qty(order=order)
                 user_cart.clear_cart()
             return render(request, 'shop/success_purchase.html')
-        return render(request, 'shop/checkout.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
