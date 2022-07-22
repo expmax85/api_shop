@@ -8,7 +8,7 @@
             <li style="margin-right: 10px">Your cart is empty.</li>
             {% endif %}
         {% else %}
-            <li>You are not verified! Please make verification <a href="{% url 'users-polls:verify' %}">Here</a></li>
+            <li style="margin-right: 10px">You are not verified! Please make verification <a href="{% url 'users-polls:verify' %}">Here</a></li>
         {% endif %}
         <li><a href="{% url 'users-polls:logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
 {#        <li><a href="{% url 'account' %}"><i class="fa fa-user"></i> {% trans 'My Account' %}</a></li>#}
