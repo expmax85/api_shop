@@ -3,6 +3,7 @@ from typing import Tuple, List
 
 from django.contrib.auth import get_user_model
 
+from goods.exceptions import NotEnoughQuantity
 from goods.models import Product
 from shop.models import Cart, CartProduct, Order, Purchase
 
@@ -15,7 +16,11 @@ class UserCart:
         self.cart, *_ = Cart.objects.get_or_create(user=user)
 
     def add_to_cart(self, product: Product, quantity: int = 1) -> bool:
-        if self.in_stock(product, quantity):
+        product_in_cart = self.cart.cart_products.select_related('product').filter(product=product).first()
+        check_quantity = quantity
+        if product_in_cart:
+            check_quantity += product_in_cart.quantity
+        if self.in_stock(product, check_quantity):
             cart_product = CartProduct.objects.filter(product=product).first()
             if not cart_product:
                 CartProduct(product=product, cart=self.cart).save()
@@ -56,6 +61,8 @@ class UserCart:
     def write_off_qty(cls, order: Order) -> None:
         products = []
         for item in order.purchases.all():
+            if item.product.quantity - item.qty < 0:
+               raise NotEnoughQuantity
             item.product.quantity -= item.qty
             products.append(item.product)
         Product.objects.bulk_update(products, ['quantity'])

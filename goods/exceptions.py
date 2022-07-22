@@ -6,3 +6,7 @@ class WrongQueryParams(APIException):
     default_detail = 'Wrong filter parameters or not specified category_id. ' \
                      'You need to use only next parameters: category_id or category, search.'
     default_code = 'WrongQueryParams'
+
+
+class NotEnoughQuantity(Exception):
+    ...

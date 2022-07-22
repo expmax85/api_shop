@@ -4,6 +4,7 @@
         {% if perms.shop.add_cart %}
             {% if sum_quantity %}
             <li style="margin-right: 10px">Your cart: <span>Summary to pay: {{ summary_price }} </span><a href="{% url 'shop-polls:checkout' %}">Go to pay</a></li>
+            <li style="margin-right: 10px"><a href="{% url 'shop-polls:clear_cart' %}">Clear cart</a></li>
             {% else %}
             <li style="margin-right: 10px">Your cart is empty.</li>
             {% endif %}
