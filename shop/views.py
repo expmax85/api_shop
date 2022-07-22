@@ -43,12 +43,13 @@ class ClearCartView(VerifyMixin, View):
         cart.clear_cart()
         return redirect(request.META.get('HTTP_REFERER'))
 
+
 class CheckoutView(VerifyMixin, View):
     """
     Get checkout and make purchase. Only for verified users.
     """
     template_name = 'shop/checkout.html'
-    form_class = OrderForm
+    form = OrderForm
     login_url = '/users/login/'
 
     def get(self, request: HttpRequest) -> Callable:
@@ -59,11 +60,11 @@ class CheckoutView(VerifyMixin, View):
                    'city': user.city,
                    'address': user.address,
                    }
-        form = self.form_class(initial=initial)
+        form = self.form(initial=initial)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request: HttpRequest) -> Callable:
-        form = self.form_class(request.POST)
+        form = self.form(request.POST)
 
         if form.is_valid():
             try:

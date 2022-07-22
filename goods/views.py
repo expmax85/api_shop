@@ -32,14 +32,14 @@ class SuperUserRequiredMixin(LoginRequiredMixin):
 
 
 class ImportView(SuperUserRequiredMixin, View):
-    form_class = ImportForm
+    form = ImportForm
     template_name = 'admin/import_products.html'
 
-    def get(self, request: HttpRequest) -> Callable:
-        return render(request, self.template_name, {'form': self.form_class})
+    def get(self, request: HttpRequest) -> 'render':
+        return render(request, self.template_name, {'form': self.form})
 
-    def post(self, request: HttpRequest) -> Callable:
-        form = self.form_class(request.POST, request.FILES)
+    def post(self, request: HttpRequest) -> 'redirect':
+        form = self.form(request.POST, request.FILES)
         if form.is_valid():
             file = form.save()
             imp = Import(file)
@@ -53,7 +53,7 @@ class ImportView(SuperUserRequiredMixin, View):
 class ReportView(SuperUserRequiredMixin, View):
     template_name = 'admin/reports.html'
 
-    def get(self, request: HttpRequest, **kwargs) -> Callable:
+    def get(self, request: HttpRequest, **kwargs) -> 'render':
         result, total = get_report_purchases()
         return render(request, self.template_name, context={'result': result,
                                                             'total': total})

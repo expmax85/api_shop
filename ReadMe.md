@@ -1,7 +1,7 @@
 # Тестовый проект интернет-магазина - тестовое задание Skillbox
  - автор: Максим Семенюк
 
-##Установка
+## Установка
 ```
 git clone https://github.com
 cd Skill_testshop
@@ -22,12 +22,12 @@ python manage.py createsuperuser
 ```
 python manage.py create_products
 ```
-##Запуск
+## Запуск
 ```
 python manage.py runserver
 ```
 
-##API
+## API
 Доступна по адресу `/api/products`. Доступны поиск по категориям: имени(`category`) или id категории(`category_id`).
 Примеры:
 ```
