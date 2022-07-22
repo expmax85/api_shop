@@ -1,5 +1,6 @@
 from typing import Callable
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
 from django.http import HttpRequest
@@ -43,6 +44,8 @@ class ImportView(SuperUserRequiredMixin, View):
             file = form.save()
             imp = Import(file)
             imp.import_data()
+            messages.add_message(request, messages.SUCCESS, 'The products was successfully added. Se the import_log for details import.')
+            return redirect('admin:index')
         return redirect(request.META.get('HTTP_REFERER'))
 
 

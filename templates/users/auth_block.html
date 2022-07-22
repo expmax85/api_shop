@@ -11,7 +11,6 @@
             <li style="margin-right: 10px">You are not verified! Please make verification <a href="{% url 'users-polls:verify' %}">Here</a></li>
         {% endif %}
         <li><a href="{% url 'users-polls:logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
-{#        <li><a href="{% url 'account' %}"><i class="fa fa-user"></i> {% trans 'My Account' %}</a></li>#}
     {% else %}
         <li style="margin-right: 10px"><a href="{% url 'users-polls:login' %}"><i class="fa fa-sign-in" aria-hidden="true"></i>Login</a></li>
         <li><a href="{% url 'users-polls:register' %}"><i class="fa fa-user-o"></i>Register</a></li>

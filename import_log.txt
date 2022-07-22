@@ -1,0 +1,12 @@
+import/test_products.csv starts import at 2022-07-22 14:39:58.799318>
+Error: The product with articles ['523423'] will not created/updated: wrong data.
+Info: New categories: ['523423', 'some_category', 'some_category_2', 'some_category_4'] was created.
+import/test_products.csv finished importing which started in 2022-07-22 14:39:58.799318>
+import/test_products_pe9Dqsj.csv starts import at 2022-07-22 14:41:54.031221>
+Error: The product with articles ['523423'] will not created/updated: wrong data.
+Warning: The product with articles ('321334', '124322', '432345', '432516') already exists. There will be updating.
+import/test_products_pe9Dqsj.csv finished importing which started in 2022-07-22 14:41:54.031221>
+import/test_products_0BfVs88.csv starts import at 2022-07-22 14:46:27.946072>
+Error: The product with articles ['523423'] will not created/updated: wrong data.
+Warning: The product with articles ('321334', '124322', '432345', '432516') already exists. There will be updating.
+import/test_products_0BfVs88.csv finished importing which started in 2022-07-22 14:46:27.946072>
