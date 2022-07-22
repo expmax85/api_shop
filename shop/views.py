@@ -16,11 +16,11 @@ from shop.services import UserCart
 from users.services import get_user
 
 
-class PermMixin(LoginRequiredMixin, PermissionRequiredMixin):
+class VerifyMixin(LoginRequiredMixin, PermissionRequiredMixin):
     permission_required = ('shop.add_cart', )
 
 
-class AddToCart(PermMixin, View):
+class AddToCart(VerifyMixin, View):
     """
     Adding product to cart. Only for verified users.
     """
@@ -33,7 +33,7 @@ class AddToCart(PermMixin, View):
         return redirect(request.META.get('HTTP_REFERER'))
 
 
-class ClearCartView(PermMixin, View):
+class ClearCartView(VerifyMixin, View):
     """
     Clear user cart
     """
@@ -43,7 +43,7 @@ class ClearCartView(PermMixin, View):
         cart.clear_cart()
         return redirect(request.META.get('HTTP_REFERER'))
 
-class CheckoutView(PermMixin, View):
+class CheckoutView(VerifyMixin, View):
     """
     Get checkout and make purchase. Only for verified users.
     """
@@ -74,9 +74,9 @@ class CheckoutView(PermMixin, View):
                     user_cart.write_off_qty(order=order)
                     user_cart.clear_cart()
             except NotEnoughQuantity:
-                messages.add_message(request, settings.ERROR_QUANTITY, 'Somewho was buying of some product in your cart. '
-                                                              'Purchase is impossible! '
-                                                              'Please choose again products you need buy.')
+                messages.add_message(request, settings.ERROR_QUANTITY, 'Somewho was buying of some product '
+                                                                       'in your cart. Purchase is impossible! '
+                                                                       'Please choose again products you need buy.')
                 user_cart.clear_cart()
                 return redirect('goods-polls:main_page')
             return render(request, 'shop/success_purchase.html')

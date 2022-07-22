@@ -1,9 +1,7 @@
-from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.base_user import BaseUserManager
-from django_otp.models import SideChannelDevice, ThrottlingMixin
 
 
 class UserManager(BaseUserManager):
@@ -66,67 +64,3 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'users'
         unique_together = ('email', 'phone')
         db_table = 'users'
-        permissions = [
-            ('Verified', 'can buy'),
-        ]
-
-
-class TwilioSMSDevice(ThrottlingMixin, SideChannelDevice):
-    """
-    A :class:`~django_otp.models.SideChannelDevice` that delivers a token via
-    the Twilio SMS service.
-    The tokens are valid for :setting:`OTP_TWILIO_TOKEN_VALIDITY` seconds. Once
-    a token has been accepted, it is no longer valid.
-    """
-    number = models.CharField(max_length=30,
-                              help_text="The mobile number to deliver tokens to (E.164).")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='twilio')
-
-    class Meta(SideChannelDevice.Meta):
-        verbose_name = "Twilio SMS Device"
-
-    def generate_challenge(self) -> str:
-        """
-        Sends the current TOTP token to ``self.number``.
-        """
-        self.generate_token(valid_secs=settings.OTP_TWILIO_TOKEN_VALIDITY)
-        message = settings.OTP_TWILIO_TOKEN_TEMPLATE.format(token=self.token)
-        if not settings.OTP_TWILIO_NO_DELIVERY:
-            self._deliver_token(message)
-        challenge = settings.OTP_TWILIO_CHALLENGE_MESSAGE.format(token=self.token)
-        return challenge
-
-    def _deliver_token(self, token: str) -> None:
-        """
-        Method for sending token. In this example it use twilio service for it.
-        If you want to use another service, just redefine this method
-        """
-        url = 'https://api.twilio.com/2010-04-01/Accounts/{0}/Messages.json'.format(settings.OTP_TWILIO_ACCOUNT)
-        data = {
-            'From': settings.OTP_TWILIO_FROM,
-            'To': self.number,
-            'Body': str(token),
-        }
-        import requests
-
-        response = requests.post(url, data=data,
-            auth=(settings.OTP_TWILIO_ACCOUNT, settings.OTP_TWILIO_AUTH))
-        try:
-            response.raise_for_status()
-        except Exception as e:
-            raise
-        if 'sid' not in response.json():
-            message = response.json().get('message')
-            raise Exception(message)
-
-    def verify_token(self, token: str) -> bool:
-        verify_allowed, _ = self.verify_is_allowed()
-        if verify_allowed:
-            verified = super(TwilioSMSDevice, self).verify_token(token)
-            if verified:
-                self.throttle_reset()
-            else:
-                self.throttle_increment()
-        else:
-            verified = False
-        return verified
