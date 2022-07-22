@@ -17,6 +17,7 @@ def custom_context(request: HttpRequest) -> Dict:
         'VERIFY_TEST_MESSAGE': settings.VERIFY_TEST_MESSAGE,
         'ERROR_QUANTITY': settings.ERROR_QUANTITY,
         'SUCCESS_VERIFY': settings.SUCCESS_VERIFY,
+        'ERROR_VERIFY': settings.ERROR_VERIFY,
         'cart': user_cart,
         'summary_price': total[0],
         'sum_quantity': total[1],

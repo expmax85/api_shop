@@ -92,7 +92,8 @@ class VerifyView(LoginRequiredMixin, View):
                                          'User: ' + request.user.email + '\n' + 'Verified.')
                     return redirect(reverse('goods-polls:main_page'))
                 else:
-                    return render(request, self.template_name)
+                    messages.add_message(request, settings.ERROR_VERIFY, 'Wrong token. Try again.')
+                    return redirect(reverse('users-polls:token'))#render(request, self.template_name, )
             else:
                 return render(request, self.template_name)
 

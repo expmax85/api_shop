@@ -14,6 +14,9 @@
             {% if message.level == VERIFY_TEST_MESSAGE %}
             <div style="color: red">You see that, because its a test project. Token: {{message}}</div>
             {% endif %}
+            {% if message.level == ERROR_VERIFY %}
+            <div style="color: red"> {{message}}</div>
+            {% endif %}
         {%endfor %}
     {% endif %}
   <form action="{% url 'users-polls:verify' %}" method="post">
